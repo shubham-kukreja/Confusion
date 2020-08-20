@@ -1,0 +1,96 @@
+<div class="container"
+    fxLayout="row"
+    fxLayout.sm="column"
+    fxLayoutGap="10px">
+    <div fxFlex="40">
+        <div *ngIf="dish">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        <h3>{{ dish.name | uppercase }}</h3>
+                    </mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="{{ BaseURL + dish.image }}" alt={{dish.name}}>
+                <mat-card-content>
+                    <p>{{ dish.description }}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button [routerLink]="['/dishdetail', prev]"><span class="fa fa-chevron-left fa-lg"></span></button>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                    <button mat-button (click)="goBack()">BACK</button>
+                    <span class="flex-spacer"></span>
+                    <button mat-button [routerLink]="['/dishdetail', next]"><span class="fa fa-chevron-right fa-lg"></span></button>
+                </mat-card-actions>
+                
+            </mat-card>
+        </div>
+    </div>
+    <div fxFlex="40">
+        <div *ngIf="dish">
+            <h1>Comments</h1>
+            <div *ngFor="let comment of dish.comments">
+                <mat-list>
+                    <mat-list-item style="height : 25px">{{comment.comment}}</mat-list-item>
+                    <mat-list-item style="height : 25px">{{comment.rating}} Stars</mat-list-item>
+                    <mat-list-item style="height : 25px">-- {{comment.author}} {{comment.date | date}}</mat-list-item>
+                </mat-list>    
+            </div>
+            <mat-list>
+                <div *ngIf="!commentForm.invalid">
+                    <mat-list-item style="height : 25px">{{commentForm.value.comment}}</mat-list-item>
+                    <mat-list-item style="height : 25px">{{commentForm.value.rating}} Stars</mat-list-item>
+                    <mat-list-item style="height : 25px">-- {{commentForm.value.author}}</mat-list-item>
+                </div>
+            </mat-list>
+            <form novalidate [formGroup]="commentForm"> 
+             <p>
+              <mat-form-field class="half-width">
+                <input matInput formControlName="author" placeholder="First Name" type="text" required>
+                <mat-error *ngIf="formErrors.author">{{formErrors.author}}</mat-error>
+              </mat-form-field><br>
+            <mat-slider formControlName="rating" min="0" max="5" step="1" thumbLabel ></mat-slider>
+            </p>
+            <p>
+            <mat-form-field class="full-width">
+                <textarea matInput formControlName="comment" placeholder="Your FeedBack" rows="12" required>
+                </textarea>
+            </mat-form-field>
+            </p>
+            <button type="submit" mat-button class="background-primary text-floral-white" (click)="onSubmit()" [disabled]="commentForm.invalid">Submit</button>
+            </form>
+        </div>
+    </div>
+        
+</div>
+<div [hidden]="dish">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!--<form *ngIf="dish" novalidate [formGroup]="commentForm"> 
+                <p>
+                  <mat-form-field class="half-width">
+                    <input matInput formControlName="author" placeholder="Name" type="text" required>
+                    <mat-error *ngIf="formErrors.firstname">{{formErrors.firstname}}</mat-error>
+                </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field class="full-width">
+                <textarea required matInput formControlName="comment" placeholder="Your Comment" rows="12">
+                </textarea>
+              </mat-form-field>
+            </p>
+             <button type="submit" mat-button class="background-primary text-floral-white" (click)="onSubmit()" [disabled]="feedbackForm.invalid">Submit</button>
+        </form>
+-->
